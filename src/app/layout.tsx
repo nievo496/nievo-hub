@@ -4,6 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import backgroundImage from '../../public/assets/others/Blue Background.jpg';
 import nievoProfileIamge from '../../public/assets/others/nievo-profile_image.jpeg';
+import nievoHubwhite from '../../public/assets/others/NievoHub white.png';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,7 +55,7 @@ export default function RootLayout({
             className="rounded-full"
           />
           <Image
-            src="/assets/others/NievoHub2.png"
+            src={nievoHubwhite}
             alt="Speedstorm Logo"
             width={1000}
             height={300}

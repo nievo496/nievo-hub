@@ -1,4 +1,5 @@
 import Image from "next/image";
+import speedstormCover from '../../public/assets/others/Home page cover.webp';
 
 export default function Home() {
   return (
@@ -8,7 +9,7 @@ export default function Home() {
           Welcome to NievoHub - The Ultimate Disney Speedstorm Dashboard
         </div>
         <Image
-          src="/assets/others/Home page cover.webp"
+          src={speedstormCover}
           alt="Speedstorm cover"
           width={1920}
           height={1080}
