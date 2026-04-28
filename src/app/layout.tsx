@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "NievoHub",
   description: "The ultimate Disney Speedstorm dashboard",
   icons: {
-    icon: "/assets/others/icon-white.png"
+    icon: "/assets/others/icon-blue.png"
   }
 };
 
