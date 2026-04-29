@@ -4,8 +4,8 @@ import speedstormCover from '../../public/assets/others/Home page cover.webp';
 export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center font-sans h-full">
-      <main className="flex flex-1 w-full h-full flex-col items-center justify-between py-8 px-8 sm:items-start">
-        <div className="text-lg mx-auto">
+      <main className="flex flex-1 w-full h-full flex-col items-center justify-between sm:items-start">
+        <div className="text-lg mx-auto py-8 px-8">
           Welcome to NievoHub - The Ultimate Disney Speedstorm Dashboard
         </div>
         <Image
