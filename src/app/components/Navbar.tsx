@@ -20,7 +20,7 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* Desktop Links (Hidden on Mobile) */}
+      {/* Desktop Links (Hidden on Mobile)*/}
       <ul className="hidden md:flex gap-8 text-lg font-medium">
         <li>
           <Link href="/tune-coins-calculator" className="hover:text-blue-400 transition-colors flex gap-2">
