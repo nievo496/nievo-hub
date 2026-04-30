@@ -16,7 +16,7 @@ interface StarSelectProps {
 
 export const StarSelect = ({ value, onChange }: StarSelectProps) => (
   <Select value={value.toString()} onValueChange={(v) => onChange(parseInt(v))}>
-    <SelectTrigger className="w-[160px] bg-zinc-800 border-white/10 text-white">
+    <SelectTrigger className="w-[160px] min-w-[160px] bg-zinc-800 border-white/10 text-white">
       <SelectValue placeholder="Stars" />
     </SelectTrigger>
     <SelectContent className="bg-zinc-900 text-white border-white/10">

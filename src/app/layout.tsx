@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import Image from "next/image";
-import backgroundImage from '../../public/assets/others/Blue Background.jpg';
 import Navbar from "./components/Navbar";
 import { cn } from "@/lib/utils";
 
@@ -38,16 +36,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full h-full flex flex-col position-relative">
-        <Image
-          src={backgroundImage}
-          alt="Blue Background"
-          placeholder="blur"
-          quality={80}
-          fill
-          sizes="100vw"
-          priority
-          className="object-cover"
-        />
         <div className="relative z-10 flex flex-col w-full h-full text-white">
           <Navbar />
           <div className="flex-1 w-full">

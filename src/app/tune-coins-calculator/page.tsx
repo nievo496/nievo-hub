@@ -65,13 +65,13 @@ const TuneCoinsCalculatorPage = () => {
   return (
     <div className="flex flex-col flex-1 font-sans h-full px-8 py-6 md:p-16">
       <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">Tune Coins Calculator</h1>
-      <p className="text-gray-400 mb-8">Calculate the exact costs for your next racer upgrade.</p>
+      <p className="mb-8">Calculate the costs for your next upgrade by current and target stars.</p>
 
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-black/20 rounded-2xl md:border border-white/5 w-full max-w-4xl mx-auto">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-black/20 rounded-2xl md:border border-white/5 w-full max-w-4xl md:min-w-3xl mx-auto">
         {/* "From" Section */}
-        <Card className="p-4 md:p-6 bg-zinc-900/50 border-blue-500/30 backdrop-blur-sm w-full max-w-sm">
+        <Card className="p-4 md:p-6 bg-zinc-900/50 border-blue-500/30 backdrop-blur-sm w-full max-w-sm md:min-w-xs">
           <h3 className="text-blue-400 font-semibold md:mb-4 text-sm tracking-wider">Current</h3>
-          <div className="flex gap-3">
+          <div className="flex flex-col xs:flex-row gap-3">
             <StarSelect value={fromStar} onChange={setFromStar} />
             <FragmentSelect value={fromFrag} onChange={setFromFrag} />
           </div>
@@ -80,9 +80,9 @@ const TuneCoinsCalculatorPage = () => {
         <ArrowRight className="hidden md:block" size={64} />
 
         {/* "To" Section */}
-        <Card className="p-4 md:p-6 bg-zinc-900/50 border-green-500/30 backdrop-blur-sm w-full max-w-sm">
+        <Card className="p-4 md:p-6 bg-zinc-900/50 border-green-500/30 backdrop-blur-sm w-full max-w-sm md:min-w-xs">
           <h3 className="text-green-400 font-semibold md:mb-4 text-sm tracking-wider">Target</h3>
-          <div className="flex gap-3">
+          <div className="flex flex-col xs:flex-row gap-3">
             <StarSelect value={toStar} onChange={setToStar} />
             <FragmentSelect value={toFrag} onChange={setToFrag} />
           </div>
@@ -90,11 +90,11 @@ const TuneCoinsCalculatorPage = () => {
       </div>
 
       {/* RESULT SECTION */}
-      <div className="mt-12 mx-auto w-full max-w-sm space-y-4">
+      <div className="mt-6 md:mt-12 mx-auto w-full max-w-sm space-y-4">
           
         <div className="bg-white/5 p-6 rounded-3xl border border-white/5 text-center flex flex-col items-center justify-center gap-6">
           <div>
-            <p className="text-gray-400 text-xs tracking-widest mb-3 uppercase">Total Tune Coins</p>
+            <p className="text-white text-xs tracking-widest mb-3 uppercase">Total Tune Coins</p>
             <div className="flex items-center gap-3">
               <Image src={tuneCoins} width={36} height={36} alt="Tune Coins" className={totals.tuneCoins > 0 ? "animate-pulse" : ""} />
               <span className="text-4xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">

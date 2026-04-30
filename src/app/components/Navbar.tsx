@@ -36,7 +36,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-md px-8 py-4">
+    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-md px-8 md:py-4">
       <div className="flex items-center justify-between gap-8 max-w-7xl mx-auto">
         
         <div className="flex items-center">
