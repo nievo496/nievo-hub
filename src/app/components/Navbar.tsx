@@ -30,16 +30,6 @@ const NAV_LINKS = [
     href: "/tune-coins-calculator",
     icon: tuneCoins
   },
-  {
-    name: "Tierlists",
-    href: "/tune-coins-calculator",
-    icon: null
-  },
-  {
-    name: "Socials",
-    href: "/tune-coins-calculator",
-    icon: null
-  },
 ];
 
 const Navbar = () => {
