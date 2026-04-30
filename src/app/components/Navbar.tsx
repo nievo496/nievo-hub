@@ -33,6 +33,8 @@ const NAV_LINKS = [
 ];
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-md px-8 py-4">
       <div className="flex items-center justify-between gap-8 max-w-7xl mx-auto">
@@ -73,14 +75,14 @@ const Navbar = () => {
 
         {/* MOBILE NAV (Hidden on desktop) */}
         <div className="md:hidden">
-          <Sheet>
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger className="p-2 text-gray-300 hover:text-white transition-colors">
               <Menu size={28} />
             </SheetTrigger>
             <SheetContent side="right" className="bg-zinc-950 text-white border-white/10 w-[300px]">
               <SheetHeader className="text-left mb-8">
                 <SheetTitle>
-                  <Link href="/">
+                  <Link href="/" onClick={() => setIsOpen(false)}>
                     <Image src={nievoHubwhite} alt="Logo" width={100} height={30} />
                   </Link>
                 </SheetTitle>
@@ -91,6 +93,7 @@ const Navbar = () => {
                   <Link
                     key={link.name}
                     href={link.href}
+                    onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 text-lg font-medium hover:text-blue-400 transition-colors"
                   >
                     {link.icon && <Image src={link.icon} alt={`${link.name} Icon`} width={20} height={20} />}
