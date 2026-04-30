@@ -73,7 +73,7 @@ const TuneCoinsCalculatorPage = () => {
           <h3 className="text-blue-400 font-semibold md:mb-4 text-sm tracking-wider">Current</h3>
           <div className="flex flex-col xs:flex-row gap-3">
             <StarSelect value={fromStar} onChange={setFromStar} />
-            <FragmentSelect value={fromFrag} onChange={setFromFrag} />
+            {fromStar < 6 && <FragmentSelect value={fromFrag} onChange={setFromFrag} />}
           </div>
         </Card>
 
@@ -84,7 +84,7 @@ const TuneCoinsCalculatorPage = () => {
           <h3 className="text-green-400 font-semibold md:mb-4 text-sm tracking-wider">Target</h3>
           <div className="flex flex-col xs:flex-row gap-3">
             <StarSelect value={toStar} onChange={setToStar} />
-            <FragmentSelect value={toFrag} onChange={setToFrag} />
+            {toStar < 6 && <FragmentSelect value={toFrag} onChange={setToFrag} />}
           </div>
         </Card>
       </div>
@@ -95,7 +95,7 @@ const TuneCoinsCalculatorPage = () => {
         <div className="bg-white/5 p-6 rounded-3xl border border-white/5 text-center flex flex-col items-center justify-center gap-6">
           <div>
             <p className="text-white text-xs tracking-widest mb-3 uppercase">Total Tune Coins</p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-center">
               <Image src={tuneCoins} width={36} height={36} alt="Tune Coins" className={totals.tuneCoins > 0 ? "animate-pulse" : ""} />
               <span className="text-4xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
                 {totals.tuneCoins.toLocaleString()}
@@ -103,8 +103,8 @@ const TuneCoinsCalculatorPage = () => {
             </div>
           </div>
           <div>
-            <p className="text-gray-400 text-xs tracking-widest mb-3 uppercase">Total Shards</p>
-            <div className="flex items-center gap-3">
+            <p className="text-xs tracking-widest mb-3 uppercase">Total Shards</p>
+            <div className="flex items-center gap-3 justify-center">
               <Image src={SHARD_IAMGES[shardIndex].src} width={36} height={36} alt="Racer Shards" className={totals.shards > 0 ? "animate-pulse" : ""} />
               <span className={cn("text-4xl", "font-black", "drop-shadow-[0_0_10px_rgba(192,132,252,0.2)]", SHARD_IAMGES[shardIndex].color)}>
                 {totals.shards.toLocaleString()}
