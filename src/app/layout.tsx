@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
 import backgroundImage from '../../public/assets/others/Blue Background.jpg';
-import nievoProfileIamge from '../../public/assets/others/nievo-profile_image.jpeg';
-import iconWhite from '../../public/assets/others/icon-white.png';
 import Navbar from "./components/Navbar";
-import Link from 'next/link'; 
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
       suppressHydrationWarning
     >
       <body className="min-h-full h-full flex flex-col position-relative">
@@ -48,32 +48,7 @@ export default function RootLayout({
           priority
           className="object-cover"
         />
-        {/* <div className="z-1 flex h-16 my-8 mx-8 position-relative flex gap-4"> */}
-          {/* <Image
-            src={nievoProfileIamge}
-            alt="Nievo Profile Image"
-            width={64}
-            height={64}
-            className="rounded-full"
-          /> */}
-          {/* <Link href="/">
-            <Image
-              src={iconWhite}
-              alt="Icon White"
-              width={64}
-              height={64}
-            />
-          </Link> */}
-          {/* <Image
-            src={nievoHubwhite}
-            alt="Speedstorm Logo"
-            width={1000}
-            height={300}
-            priority
-            className="h-full w-auto"
-          /> */}
-        {/* </div> */}
-        <div className="z-1 flex flex-col w-full h-full">
+        <div className="relative z-10 flex flex-col w-full h-full text-white">
           <Navbar />
           <div className="flex-1 w-full">
             {children}
