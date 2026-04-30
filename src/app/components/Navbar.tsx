@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/navigation-menu";
 
 import nievoHubwhite from '@/../public/assets/others/NievoHub white.png';
-import tuneCoins from '@/../public/assets/others/Tune Coins.png';
+import tuneCoins from '@/../public/assets/currencies/Tune Coins.png';
 import { cn } from '@/lib/utils';
 
 const NAV_LINKS = [
