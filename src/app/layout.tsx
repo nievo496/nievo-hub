@@ -18,10 +18,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NievoHub",
-  description: "The ultimate Disney Speedstorm dashboard",
+  title: "NievoHub | Disney Speedstorm Tune Coins Calculator & Dashboard",
+  description: "The ultimate Disney Speedstorm dashboard. Calculate your Tune Coins and Racer Shards costs for upgrading your racers.",
+  keywords: ["NievoHub", "Nievo Hub", "Nievo calculator", "Speedstorm upgrades", "Speedstorm tune coins", "Disney Speedstorm", "Dashboard", "Tune Coins Calculator"],
   icons: {
     icon: "/assets/others/icon-blue.png"
+  },
+  verification: {
+    google: 'DyW04xI3ikNMsgCcZf9omsyTyhqCrETpTl3zcXPrUQM',
   }
 };
 

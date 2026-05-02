@@ -64,8 +64,8 @@ const TuneCoinsCalculatorPage = () => {
 
   return (
     <div className="flex flex-col flex-1 font-sans h-full px-8 py-6 md:p-16">
-      <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">Tune Coins Calculator</h1>
-      <p className="mb-8">Calculate the costs for your next upgrade by current and target stars.</p>
+      <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">Disney Speedstorm - Tune Coins Calculator</h1>
+      <p className="mb-4 md:mb-8">Calculate the costs for your next upgrade by current and target stars.</p>
 
       <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-black/20 rounded-2xl md:border border-white/5 w-full max-w-4xl md:min-w-3xl mx-auto">
         {/* "From" Section */}
@@ -96,7 +96,7 @@ const TuneCoinsCalculatorPage = () => {
           <div>
             <p className="text-white text-xs tracking-widest mb-3 uppercase">Total Tune Coins</p>
             <div className="flex items-center gap-3 justify-center">
-              <Image src={tuneCoins} width={36} height={36} alt="Tune Coins" className={totals.tuneCoins > 0 ? "animate-pulse" : ""} />
+              <Image src={tuneCoins} width={36} height={36} alt="Disney Speedstorm Tune Coins" className={totals.tuneCoins > 0 ? "animate-pulse" : ""} />
               <span className="text-4xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.2)]">
                 {totals.tuneCoins.toLocaleString()}
               </span>
@@ -105,7 +105,7 @@ const TuneCoinsCalculatorPage = () => {
           <div>
             <p className="text-xs tracking-widest mb-3 uppercase">Total Shards</p>
             <div className="flex items-center gap-3 justify-center">
-              <Image src={SHARD_IAMGES[shardIndex].src} width={36} height={36} alt="Racer Shards" className={totals.shards > 0 ? "animate-pulse" : ""} />
+              <Image src={SHARD_IAMGES[shardIndex].src} width={36} height={36} alt="Disney Speedstorm Racer Shards" className={totals.shards > 0 ? "animate-pulse" : ""} />
               <span className={cn("text-4xl", "font-black", "drop-shadow-[0_0_10px_rgba(192,132,252,0.2)]", SHARD_IAMGES[shardIndex].color)}>
                 {totals.shards.toLocaleString()}
               </span>
