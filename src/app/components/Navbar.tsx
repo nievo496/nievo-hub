@@ -61,7 +61,7 @@ const Navbar = () => {
                     >
                       {link.icon && (
                         <span className="relative self-center">
-                          <Image src={link.icon} alt="" width={20} height={20} />
+                          <Image src={link.icon} alt={link.name} width={20} height={20} />
                         </span>
                       )}
                       {link.name}
@@ -83,7 +83,7 @@ const Navbar = () => {
               <SheetHeader className="text-left mb-8">
                 <SheetTitle>
                   <Link href="/" onClick={() => setIsOpen(false)}>
-                    <Image src={nievoHubwhite} alt="Logo" width={100} height={30} />
+                    <Image src={nievoHubwhite} alt="NievoHub Logo" width={100} height={30} />
                   </Link>
                 </SheetTitle>
               </SheetHeader>

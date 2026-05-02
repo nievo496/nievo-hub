@@ -18,7 +18,13 @@ export const FragmentSelect = ({ value, onChange }: FragmentSelectProps) => (
       {[0, 1, 2, 3, 4].map((num) => (
         <SelectItem key={num} value={num.toString()}>
           <div className="flex items-center gap-2">
-            <Image src={`/assets/stars/${num} Star Fragments.png`} alt="" width={20} height={20} className="object-contain" />
+            <Image
+              src={`/assets/stars/${num} Star Fragments.png`}
+              alt={`Disney Speedstorm ${num} Star Fragments`}
+              width={20}
+              height={20}
+              className="object-contain"
+            />
             <span>{num}/5</span>
           </div>
         </SelectItem>
