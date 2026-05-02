@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import { cn } from "@/lib/utils";
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -42,6 +43,7 @@ export default function RootLayout({
             {children}
           </div>
         </div>
+        <Analytics />
       </body>
     </html>
   );
