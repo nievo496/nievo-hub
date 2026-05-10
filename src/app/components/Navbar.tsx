@@ -22,14 +22,20 @@ import {
 
 import nievoHubwhite from '@/../public/assets/others/NievoHub white.png';
 import tuneCoins from '@/../public/assets/currencies/Tune Coins.png';
+import { Link2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const NAV_LINKS = [
   {
     name: "Tune Coins Calculator",
     href: "/tune-coins-calculator",
-    icon: tuneCoins
+    icon: <Image src={tuneCoins} alt="Tune Coins" width={20} height={20} />
   },
+  {
+    name: "Links",
+    href: "/links",
+    icon: <Link2 size={20} className="text-blue-400" />
+  }
 ];
 
 const Navbar = () => {
@@ -59,9 +65,14 @@ const Navbar = () => {
                         "flex items-baseline gap-2"
                       )}
                     >
-                      {link.icon && (
+                      {/* {link.icon && (
                         <span className="relative self-center">
                           <Image src={link.icon} alt={link.name} width={20} height={20} />
+                        </span>
+                      )} */}
+                      {link.icon && (
+                        <span className="relative self-center flex items-center justify-center">
+                          {link.icon}
                         </span>
                       )}
                       {link.name}
