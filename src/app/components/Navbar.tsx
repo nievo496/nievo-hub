@@ -65,11 +65,6 @@ const Navbar = () => {
                         "flex items-baseline gap-2"
                       )}
                     >
-                      {/* {link.icon && (
-                        <span className="relative self-center">
-                          <Image src={link.icon} alt={link.name} width={20} height={20} />
-                        </span>
-                      )} */}
                       {link.icon && (
                         <span className="relative self-center flex items-center justify-center">
                           {link.icon}
@@ -107,7 +102,11 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 text-lg font-medium hover:text-blue-400 transition-colors"
                   >
-                    {link.icon && <Image src={link.icon} alt={`${link.name} Icon`} width={20} height={20} />}
+                    {link.icon && (
+                        <span className="relative self-center flex items-center justify-center">
+                          {link.icon}
+                        </span>
+                      )}
                     {link.name}
                   </Link>
                 ))}
