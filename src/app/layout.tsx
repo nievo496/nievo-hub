@@ -20,9 +20,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "NievoHub | Disney Speedstorm Tune Coins Calculator & Dashboard",
   description: "The ultimate Disney Speedstorm dashboard. Calculate your Tune Coins and Racer Shards costs for upgrading your racers.",
+  appleWebApp: {
+    title: "NievoHub",
+    statusBarStyle: "black-translucent",
+    capable: true,
+  },
   keywords: ["NievoHub", "Nievo Hub", "Nievo calculator", "Speedstorm upgrades", "Speedstorm tune coins", "Disney Speedstorm", "Dashboard", "Tune Coins Calculator"],
   icons: {
-    icon: "/assets/others/icon-blue.png"
+    icon: "/assets/others/icon-blue.png",
+    apple: '/assets/others/apple-touch-icon.png',
   },
   verification: {
     google: 'DyW04xI3ikNMsgCcZf9omsyTyhqCrETpTl3zcXPrUQM',
