@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { FaTwitch, FaYoutube } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { SiKofi } from 'react-icons/si';
+import { ListOrdered } from 'lucide-react';
+import { LinkCard } from '@/app/components/LinkCard';
 import nievoAvatar from '@/../public/assets/others/nievo-profile_image.jpeg';
 
 const socialLinks = [
@@ -39,6 +41,25 @@ const socialLinks = [
     displayText: 'Contact me via Email',
     brandColor: 'bg-white',
     glow: 'shadow-white/10'
+  },
+];
+
+const resourceLinks = [
+  {
+    name: 'All racers vs Supercharged',
+    url: 'https://tiermaker.com/create/disney-speedstorm-racers-18181074',
+    icon: <ListOrdered size={24} color="white" />,
+    displayText: 'Rank all racers',
+    brandColor: 'bg-[#FF7F50]',
+    glow: 'shadow-[#FF7F50]/20'
+  },
+  {
+    name: 'Supercharged Tier List',
+    url: 'https://tiermaker.com/create/disney-speedstorm-supercharged-racers-season-17-18181074',
+    icon: <ListOrdered size={24} color="white" />,
+    displayText: 'Rank Supercharged racers',
+    brandColor: 'bg-[#FF7F50]',
+    glow: 'shadow-[#FF7F50]/20'
   },
 ];
 
@@ -79,26 +100,22 @@ export default function LinksPage() {
           </button>
         </div>
 
-        {socialLinks.map((link) => (
-          <a
-            key={link.name}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center p-3 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all hover:scale-[1.02] active:scale-[0.98] group"
-          >
-            <div className={`flex items-center justify-center w-12 h-12 rounded-xl text-xl mr-4 shadow-lg transition-transform group-hover:rotate-6 ${link.brandColor} ${link.glow}`}>
-              {link.icon}
-            </div>
-            <div className="flex-1">
-              <div className="text-lg font-bold text-white">{link.name}</div>
-              <div className="text-white">{link.displayText}</div>
-            </div>
-            <div className="text-white/20 group-hover:text-white/50 transition-colors pr-2">
-              →
-            </div>
-          </a>
-        ))}
+
+        <div className="space-y-3">
+          {socialLinks.map((link) => (
+            <LinkCard key={link.name} {...link} />
+          ))}
+          
+          <div className="pt-8 pb-2">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest text-center">
+              Tier List Templates
+            </h3>
+          </div>
+
+          {resourceLinks.map((link) => (
+            <LinkCard key={link.name} {...link} />
+          ))}
+        </div>        
       </div>
     </main>
   );
