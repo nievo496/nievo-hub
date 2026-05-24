@@ -11,16 +11,17 @@ import {
 
 interface StarSelectProps {
   value: number;
+  options?: number[];
   onChange: (val: number) => void;
 }
 
-export const StarSelect = ({ value, onChange }: StarSelectProps) => (
+export const StarSelect = ({ value, options = [0, 1, 2, 3, 4, 5, 6], onChange }: StarSelectProps) => (
   <Select value={value.toString()} onValueChange={(v) => onChange(parseInt(v))}>
     <SelectTrigger className="w-[160px] min-w-[160px] bg-zinc-800 border-white/10 text-white">
       <SelectValue placeholder="Stars" />
     </SelectTrigger>
     <SelectContent className="bg-zinc-900 text-white border-white/10">
-      {[0, 1, 2, 3, 4, 5, 6].map((num) => (
+      {options.map((num) => (
         <SelectItem key={num} value={num.toString()}>
           <div className="flex items-center gap-2">
             <span>{num === 0 ? '0 Stars' : "⭐".repeat(num)}</span>
