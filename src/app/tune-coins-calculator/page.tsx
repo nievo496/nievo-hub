@@ -74,14 +74,14 @@ const TuneCoinsCalculatorPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col flex-1 font-sans h-full px-8 py-6 md:px-16">
-      <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">Disney Speedstorm - Tune Coins Calculator</h1>
-      <p className="mb-4 md:mb-8">Calculate the costs for your next upgrade by current and target stars.</p>
+    <div className="flex flex-col flex-1 font-sans h-full px-8 py-6 md:px-16 gap-4 md:gap-8">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Disney Speedstorm - Tune Coins Calculator</h1>
+        <p>Calculate the costs for your next upgrade by current and target stars.</p>
+      </div>
 
-      {/* <div className="flex flex-col md:flex-row gap-6"> */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 md:gap-12 justify-center items-start">
-        {/* <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-black/20 rounded-2xl md:border border-white/5 w-full max-w-4xl md:min-w-3xl mx-auto"> */}
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-black/20 rounded-2xl md:border border-white/5 w-full max-w-4xl md:min-w-3xl">
+      <div className="flex flex-col gap-4 md:gap-8">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-black/20 rounded-2xl md:border border-white/5 w-full max-w-4xl md:min-w-3xl mx-auto">
           {/* "From" Section */}
           <Card className="p-4 md:p-6 bg-zinc-900/50 border-blue-500/30 backdrop-blur-sm w-full max-w-sm md:min-w-xs">
             <h3 className="text-blue-400 font-semibold md:mb-4 text-sm tracking-wider">Current</h3>
@@ -103,9 +103,8 @@ const TuneCoinsCalculatorPage = () => {
           </Card>
         </div>
 
-        {/* RESULT SECTION */}
-        {/* <div className="mt-6 md:mt-12 mx-auto w-full max-w-sm space-y-4"> */}
-        <div className="w-full mx-auto">
+        {/* Result Section */}
+        <div className="mx-auto w-full max-w-sm space-y-4">
             
           <div className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/5 text-center flex flex-col items-center justify-center gap-6">
             <div>
@@ -135,9 +134,9 @@ const TuneCoinsCalculatorPage = () => {
       </div>
 
       {/* Reference Tables Section */}
-      <div className="mt-12 flex justify-between gap-6 md:gap-12 flex-col md:flex-row">
+      <div className="flex justify-between gap-4 md:gap-8 flex-col lg:flex-row">
 
-        {/* Table 2: Tune Coins */}
+        {/* Table 1: Tune Coins */}
         <UpgradeTable 
           title="Tune Coins Costs Table"
           currencyIcon={tuneCoins}
@@ -150,7 +149,7 @@ const TuneCoinsCalculatorPage = () => {
           toFrag={toFrag}
         />
         
-        {/* Table 1: Shards */}
+        {/* Table 2: Shards */}
         <UpgradeTable 
           title="Racer Shards Costs Table"
           currencyIcon={commonShard}
@@ -165,7 +164,7 @@ const TuneCoinsCalculatorPage = () => {
 
       </div>
 
-      <div className="mt-12 flex items-start gap-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl max-w-4xl mx-auto">
+      <div className="flex items-start gap-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl max-w-4xl mx-auto">
         <Info size={16} className="text-slate-500 mt-0.5 flex-shrink-0" />
         <div className="text-xs text-slate-400 leading-relaxed">
           {/* Mobile Only Text: Short and clean */}
