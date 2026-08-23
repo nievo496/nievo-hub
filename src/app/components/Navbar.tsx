@@ -32,6 +32,11 @@ const NAV_LINKS = [
     icon: <Image src={tuneCoins} alt="Tune Coins" width={20} height={20} />
   },
   {
+    name: "Max Level Finder",
+    href: "/tune-coins-calculator?tab=max-level",
+    icon: <Image src={`/assets/stars/5 Star Fragments.png`} alt="Disney Speedstorm Star" width={20} height={20} />
+  },
+  {
     name: "Links",
     href: "/links",
     icon: <Link2 size={20} className="text-blue-400" />
@@ -47,7 +52,7 @@ const Navbar = () => {
         
         <div className="flex items-center">
           <Link href="/" className="transition-opacity hover:opacity-80">
-            <Image src={nievoHubwhite} alt="NievoHub Logo" width={120} height={36} priority />
+            <Image src={nievoHubwhite} alt="NievoHub Logo" width={120} priority className="h-auto"/>
           </Link>
         </div>
 
@@ -56,12 +61,15 @@ const Navbar = () => {
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
               {NAV_LINKS.map((link) => (
-                <NavigationMenuItem>
-                  <Link key={link.name} href={link.href} passHref>
-                    <NavigationMenuLink
+                <NavigationMenuItem key={link.name}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href={link.href}
                       className={cn(
                         navigationMenuTriggerStyle(),
                         "bg-transparent text-white hover:bg-white/10 hover:text-blue-400",
+                        "focus:bg-white/10 focus:text-blue-400 focus:outline-none",
+                        "data-[active]:bg-white/10 data-[state=open]:bg-white/10",
                         "flex items-baseline gap-2"
                       )}
                     >
@@ -71,8 +79,8 @@ const Navbar = () => {
                         </span>
                       )}
                       {link.name}
-                    </NavigationMenuLink>
-                  </Link>
+                    </Link>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>

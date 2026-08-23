@@ -46,9 +46,9 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
       suppressHydrationWarning
     >
-      <body className="min-h-full h-full flex flex-col position-relative">
+      <body className="min-h-full h-full flex flex-col position-relative" suppressHydrationWarning>
+        <Navbar />
         <div className="relative z-10 flex flex-col w-full h-full text-white">
-          <Navbar />
           <div className="flex-1 w-full">
             {children}
           </div>
