@@ -282,36 +282,51 @@ const TuneCoinsCalculatorContent = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 text-center flex flex-col items-center justify-center gap-4 shadow-xl backdrop-blur-md">
+            <div className="text-sky-200/70 bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 text-center flex flex-col items-center justify-center gap-4 shadow-xl backdrop-blur-md">
               <div>
-                <p className="text-sky-200/70 text-xs tracking-widest mb-2 uppercase font-bold">Available Level</p>
+                <p className="text-xs tracking-widest mb-2 uppercase font-bold">Available Level</p>
                 <div className="text-2xl">
-                  {Array.from({length: resourceResults.star}).map((_, i) => (
-                    <Image
-                      key={i}
-                      src={`/assets/stars/5 Star Fragments.png`}
-                      alt={`Disney Speedstorm 5 Star Fragments number ${i + 1}`}
-                      width={28}
-                      height={28}
-                      className="object-contain inline"
-                    />
-                  ))}
-                  {resourceResults.frag > 0 && (
-                    <Image
-                      src={`/assets/stars/${resourceResults.frag} Star Fragments.png`}
-                      alt={`Disney Speedstorm ${resourceResults.frag} Star Fragments`}
-                      width={28}
-                      height={28}
-                      className="object-contain inline"
-                    />
+                  {resourceResults.star === 0 && resourceResults.frag === 0 ? (
+                    <div className="flex items-center justify-center gap-2">
+                      0 stars
+                      <Image
+                        src={`/assets/stars/0 Star Fragments.png`}
+                        alt={`Disney Speedstorm 0 Star Fragments}`}
+                        width={28}
+                        height={28}
+                        className="inline-block"
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      {Array.from({length: resourceResults.star}).map((_, i) => (
+                        <Image
+                          key={i}
+                          src={`/assets/stars/5 Star Fragments.png`}
+                          alt={`Disney Speedstorm 5 Star Fragments number ${i + 1}`}
+                          width={28}
+                          height={28}
+                          className="object-contain inline"
+                        />
+                      ))}
+                      {resourceResults.frag > 0 && (
+                        <Image
+                          src={`/assets/stars/${resourceResults.frag} Star Fragments.png`}
+                          alt={`Disney Speedstorm ${resourceResults.frag} Star Fragments`}
+                          width={28}
+                          height={28}
+                          className="object-contain inline"
+                        />
+                      )}
+                    </>
                   )}
                 </div>
               </div>
 
               <div className="w-full border-t border-white/10 pt-3 text-sm space-y-1.5 text-sky-200/70">
                 {resourceResults.hasNextUpgrade ? (
-                  <div className="flex justify-between items-center">
-                    <span>Next Fragment Progress:</span>
+                  <div className="flex flex-col justify-between items-center">
+                    <p className="tracking-widest mb-2 font-bold">Next Fragment Progress:</p>
                     <div className="flex items-center justify-center gap-2 w-full">
                       <span className="text-yellow-300 font-bold text-lg">{resourceResults.leftover} / {resourceResults.nextCost}</span>
                       <Image 
@@ -323,7 +338,7 @@ const TuneCoinsCalculatorContent = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span>Leftover {resourceType === 'SHARDS' ? 'Shards' : 'Tune Coins'}:</span>
                     <span className="text-yellow-300 text-lg font-bold">{resourceResults.leftover.toLocaleString()}</span>
                   </div>
