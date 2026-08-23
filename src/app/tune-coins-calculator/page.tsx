@@ -47,14 +47,14 @@ const SHARD_IMAGES = [
 ];
 
 type CalcMode = 'BY_TARGET' | 'BY_RESOURCES';
-type ResourceType = 'SHARDS' | 'COINS';
+type ResourceType = 'COINS' | 'SHARDS';
 
 const TuneCoinsCalculatorContent = () => {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') === 'max-level' ? 'BY_RESOURCES' : 'BY_TARGET';
 
   const [calcMode, setCalcMode] = useState<CalcMode>(initialTab);
-  const [resourceType, setResourceType] = useState<ResourceType>('SHARDS');
+  const [resourceType, setResourceType] = useState<ResourceType>('COINS');
   const [resourceAmount, setResourceAmount] = useState<number>(0);
 
   const [fromStar, setFromStar] = useState(0);
@@ -198,9 +198,9 @@ const TuneCoinsCalculatorContent = () => {
       </div>
 
       <div className="flex flex-col gap-4 md:gap-8">
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-white/[0.03] rounded-2xl md:border border-white/10 w-full max-w-4xl md:min-w-3xl mx-auto shadow-2xl backdrop-blur-md">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center md:p-10 md:bg-white/[0.03] rounded-2xl md:border border-white/10 w-full max-w-4xl md:min-w-3xl mx-auto md:shadow-2xl backdrop-blur-md">
           
-          <Card className="p-4 md:p-6 bg-white/5 border-sky-400/20 backdrop-blur-md w-full max-w-sm md:min-w-xs shadow-lg">
+          <Card className="p-4 md:p-6 bg-white/5 border-sky-400/20 backdrop-blur-md w-full max-w-sm md:min-w-xs shadow-2xl md:shadow-lg">
             <h3 className="text-sky-300 font-bold md:mb-4 text-xs uppercase tracking-widest">Current</h3>
             <div className="flex flex-col xs:flex-row gap-3">
               <StarSelect value={fromStar} onChange={setFromStar} />
@@ -211,7 +211,7 @@ const TuneCoinsCalculatorContent = () => {
           <ArrowRight className="hidden md:block" size={40} />
 
           {calcMode === 'BY_TARGET' ? (
-            <Card className="p-4 md:p-6 bg-white/5 border-emerald-400/20 backdrop-blur-md w-full max-w-sm md:min-w-xs shadow-lg">
+            <Card className="p-4 md:p-6 bg-white/5 border-emerald-400/20 backdrop-blur-md w-full max-w-sm md:min-w-xs shadow-2xl md:shadow-lg">
               <h3 className="text-emerald-300 font-bold md:mb-4 text-xs uppercase tracking-widest">Target</h3>
               <div className="flex flex-col xs:flex-row gap-3">
                 <StarSelect value={toStar} onChange={setToStar} />
@@ -219,21 +219,21 @@ const TuneCoinsCalculatorContent = () => {
               </div>
             </Card>
           ) : (
-            <Card className="p-4 md:p-6 bg-white/5 border-purple-400/20 backdrop-blur-md w-full max-w-sm md:min-w-xs flex flex-col gap-3 shadow-lg">
+            <Card className="p-4 md:p-6 bg-white/5 border-purple-400/20 backdrop-blur-md w-full max-w-sm md:min-w-xs flex flex-col gap-3 shadow-2xl md:shadow-lg">
               <div className="flex justify-between items-center">
                 <h3 className="text-purple-300 font-bold text-xs uppercase tracking-widest">Your Inventory</h3>
                 <div className="flex rounded-lg bg-black/30 p-0.5 border border-white/10 text-xs">
-                  <button 
-                    onClick={() => { setResourceType('SHARDS'); setResourceAmount(0); }} 
-                    className={cn("px-2.5 py-1 rounded-md transition-all font-semibold", resourceType === 'SHARDS' ? "bg-blue-400 text-white shadow" : "text-sky-200/60 hover:text-white")}
-                  >
-                    Shards
-                  </button>
                   <button 
                     onClick={() => { setResourceType('COINS'); setResourceAmount(0); }} 
                     className={cn("px-2.5 py-1 rounded-md transition-all font-semibold", resourceType === 'COINS' ? "bg-blue-400 text-white shadow" : "text-sky-200/60 hover:text-white")}
                   >
                     Tune Coins
+                  </button>
+                  <button 
+                    onClick={() => { setResourceType('SHARDS'); setResourceAmount(0); }} 
+                    className={cn("px-2.5 py-1 rounded-md transition-all font-semibold", resourceType === 'SHARDS' ? "bg-blue-400 text-white shadow" : "text-sky-200/60 hover:text-white")}
+                  >
+                    Shards
                   </button>
                 </div>
               </div>
@@ -308,17 +308,24 @@ const TuneCoinsCalculatorContent = () => {
                 </div>
               </div>
 
-              <div className="w-full border-t border-white/10 pt-3 text-sm text-sky-200/60 space-y-1.5">
-                <div className="flex justify-between">
-                  <span>Leftover {resourceType === 'SHARDS' ? 'Shards' : 'Tune Coins'}:</span>
-                  <span className="text-white font-bold">{resourceResults.leftover.toLocaleString()}</span>
-                </div>
-                {resourceResults.hasNextUpgrade && resourceType === 'SHARDS' && (
-                  <div className="flex justify-between text-sky-200/40">
+              <div className="w-full border-t border-white/10 pt-3 text-sm space-y-1.5 text-sky-200/70">
+                {resourceResults.hasNextUpgrade ? (
+                  <div className="flex justify-between items-center">
                     <span>Next Fragment Progress:</span>
-                    <span>
-                      <span className="text-purple-300 font-bold">{resourceResults.leftover}</span> / {resourceResults.nextCost} Shards
-                    </span>
+                    <div className="flex items-center justify-center gap-2 w-full">
+                      <span className="text-yellow-300 font-bold text-lg">{resourceResults.leftover} / {resourceResults.nextCost}</span>
+                      <Image 
+                        src={resourceType === 'SHARDS' ? SHARD_IMAGES[shardIndex].src : tuneCoins} 
+                        alt="Resource Type" 
+                        width={28}
+                        className="h-auto"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between">
+                    <span>Leftover {resourceType === 'SHARDS' ? 'Shards' : 'Tune Coins'}:</span>
+                    <span className="text-yellow-300 text-lg font-bold">{resourceResults.leftover.toLocaleString()}</span>
                   </div>
                 )}
               </div>
