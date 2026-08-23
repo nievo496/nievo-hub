@@ -28,7 +28,7 @@ export const UpgradeTable = ({ title, currencyIcon, currencyAlt, multiplier, bas
   return (
     <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-sm overflow-hidden">
       <div className="flex items-center gap-2 mb-4 border-b border-white/10 pb-2">
-        <Image src={currencyIcon} alt={currencyAlt} width={24} height={24} className="object-contain" />
+        <Image src={currencyIcon} alt={currencyAlt} width={24} className="object-contain h-auto" />
         <h3 className="text-lg font-bold text-white">{title}</h3>
       </div>
 
