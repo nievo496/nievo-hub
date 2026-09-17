@@ -1,19 +1,20 @@
 import React from 'react';
 import Image, { StaticImageData } from 'next/image';
 
-interface UpgradeTableProps {
+interface UpgradeTableComparisionProps {
   title: string;
   currencyIcon: StaticImageData;
   currencyAlt: string;
   multiplier: number; // 1 for shards, 100 for tune coins
-  baseMatrix: number[][];
+  baseMatrix1: number[][];
+  baseMatrix2: number[][];
   fromStar: number;
   fromFrag: number;
   toStar: number;
   toFrag: number;
 }
 
-export const UpgradeTable = ({ title, currencyIcon, currencyAlt, multiplier, baseMatrix, fromStar, fromFrag, toStar, toFrag }: UpgradeTableProps) => {
+export const UpgradeTableComparision = ({ title, currencyIcon, currencyAlt, multiplier, baseMatrix1, baseMatrix2, fromStar, fromFrag, toStar, toFrag }: UpgradeTableComparisionProps) => {
   // 5 fragments + 1 total column = 6 value columns
   const headers = [
     { text: "Stars" },
@@ -45,11 +46,12 @@ export const UpgradeTable = ({ title, currencyIcon, currencyAlt, multiplier, bas
                   )}
                 </th>
               ))}
+              <th></th>
             </tr>
           </thead>
 
           <tbody className="divide-y divide-white/5 text-white">
-            {baseMatrix.map((row, rowIndex) => {
+            {baseMatrix1.map((row, rowIndex) => {
               const targetStarDisplay = rowIndex + 1;
               
               return (
@@ -63,7 +65,8 @@ export const UpgradeTable = ({ title, currencyIcon, currencyAlt, multiplier, bas
                   {/* ★⭐ */}
 
                   {row.map((baseValue, colIndex) => {
-                    const finalValue = baseValue * multiplier;
+                    const finalValue1 = baseValue * multiplier;
+                    const finalValue2 = baseMatrix2[rowIndex][colIndex] * multiplier;
                     const isTotalColumn = colIndex === row.length - 1;
                     let isActive = false;
 
@@ -84,14 +87,27 @@ export const UpgradeTable = ({ title, currencyIcon, currencyAlt, multiplier, bas
                           isActive 
                             ? 'bg-blue-500/30 text-blue-300 font-semibold border border-blue-400/30 shadow-[inset_0_0_12px_rgba(59,130,246,0.2)]' 
                             : isTotalColumn 
-                              ? 'font-bold text-yellow-400 bg-yellow-500/3' 
+                              // ? 'font-bold text-yellow-400 bg-yellow-500/3' 
+                              ? 'font-bold border-l border-r border-white/50' 
                               : 'text-slate-200'
                         }`}
                       >
-                        {finalValue.toLocaleString()}
+                        <span className={`text-sm ${finalValue1 > finalValue2 ? 'text-red-400' : finalValue1 < finalValue2 ? 'text-green-400' : 'text-slate-200'}`}>
+                          {finalValue1.toLocaleString()}
+                        </span>
+                        <hr className="border-white/25" />
+                        {/* <span className={`text-xs ${finalValue2 > finalValue1 ? 'text-red-400' : finalValue2 < finalValue1 ? 'text-green-400' : 'text-slate-200'}`}> */}
+                        <span className={`text-xs`}>
+                          {finalValue2.toLocaleString()}
+                        </span>
                       </td>
                     );
                   })}
+                  <td className="text-center">
+                    <span className="text-sm">Now</span>
+                    <hr className="border-white/25" />
+                    <span className="text-xs">Season 22</span>
+                  </td>
                 </tr>
               );
             })}
