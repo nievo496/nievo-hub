@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, Suspense, useRef } from 'react';
 import Image from 'next/image';
 import { Info, ArrowRight } from 'lucide-react';
 import { StarSelect, FragmentSelect } from '@/app/components';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import tuneCoins from '@/../public/assets/currencies/Tune Coins.png';
-import commonShard from '@/../public/assets/currencies/Common shard.webp';
-import rareShard from '@/../public/assets/currencies/Rare shard.webp';
-import epicShard from '@/../public/assets/currencies/Epic shard.webp';
 import { UpgradeTable } from '@/app/components/UpgradeTable';
 import { useSearchParams } from 'next/navigation';
+import AnimatedShardIcon from '../components/AnimatedShardIcon';
+import commonShard from '@/../public/assets/currencies/Common shard.webp';
 
 const S22_SHARDS_MATRIX = [
   [3, 3, 3, 3, 3, 15],
@@ -40,12 +39,6 @@ const S22_RACER_SHARDS_COSTS = [
   15, 15, 15, 15, 15,
 ];
 
-const SHARD_IMAGES = [
-  { src: commonShard, alt: "Common Shard", color: "text-sky-300" },
-  { src: rareShard, alt: "Rare Shard", color: "text-purple-300" },
-  { src: epicShard, alt: "Epic Shard", color: "text-yellow-300" }
-];
-
 type CalcMode = 'BY_TARGET' | 'BY_RESOURCES';
 type ResourceType = 'SHARDS' | 'COINS';
 
@@ -62,20 +55,6 @@ const TuneCoinsCalculatorContent = () => {
   
   const [toStar, setToStar] = useState(6);
   const [toFrag, setToFrag] = useState(0);
-  
-  const [shardIndex, setShardIndex] = useState(0);
-
-  const s22targetTotals = useMemo(() => {
-    const startIndex = fromStar * 5 + fromFrag;
-    const endIndex = toStar * 5 + toFrag;
-
-    if (endIndex <= startIndex) return { tuneCoins: 0, shards: 0 };
-
-    const tuneCoinsTotal = S22_TUNE_COINS_COSTS.slice(startIndex, endIndex).reduce((acc, cost) => acc + cost, 0);
-    const shardsTotal = S22_RACER_SHARDS_COSTS.slice(startIndex, endIndex).reduce((acc, cost) => acc + cost, 0);
-
-    return { tuneCoins: tuneCoinsTotal, shards: shardsTotal };
-  }, [fromStar, fromFrag, toStar, toFrag]);
 
   const s22resourceResults = useMemo(() => {
     let currentAbsIndex = fromStar * 5 + fromFrag;
@@ -89,12 +68,11 @@ const TuneCoinsCalculatorContent = () => {
 
     const finalStar = Math.floor(currentAbsIndex / 5);
     const finalFrag = currentAbsIndex % 5;
-
-    setToStar(finalStar);
-    setToFrag(finalFrag);
     
     const hasNextUpgrade = currentAbsIndex < costArray.length;
     const nextCost = hasNextUpgrade ? costArray[currentAbsIndex] : 0;
+
+    console.log("s22ResourceResults changed:", { finalStar, finalFrag, leftover: budget, nextCost, hasNextUpgrade });
 
     return {
       star: finalStar,
@@ -105,6 +83,31 @@ const TuneCoinsCalculatorContent = () => {
     };
   }, [fromStar, fromFrag, resourceType, resourceAmount]);
 
+  const calculateUpgradeTotals = (
+    fromStar: number,
+    fromFrag: number,
+    toStar: number,
+    toFrag: number
+  ) => {
+    const startIndex = fromStar * 5 + fromFrag;
+    const endIndex = toStar * 5 + toFrag;
+
+    if (endIndex <= startIndex) return { tuneCoins: 0, shards: 0 };
+
+    const tuneCoinsTotal = S22_TUNE_COINS_COSTS.slice(startIndex, endIndex).reduce((acc, cost) => acc + cost, 0);
+    const shardsTotal = S22_RACER_SHARDS_COSTS.slice(startIndex, endIndex).reduce((acc, cost) => acc + cost, 0);
+
+    return { tuneCoins: tuneCoinsTotal, shards: shardsTotal };
+  };
+
+  const s22targetTotals = useMemo(() => {
+    return calculateUpgradeTotals(fromStar, fromFrag, toStar, toFrag);
+  }, [fromStar, fromFrag, toStar, toFrag]);
+
+  const s22resourceTotals = useMemo(() => {
+    return calculateUpgradeTotals(fromStar, fromFrag, s22resourceResults.star, s22resourceResults.frag);
+  }, [fromStar, fromFrag, s22resourceResults.star, s22resourceResults.frag]);
+    
   const handleResourceInputChange = (val: string) => {
     const parsed = parseInt(val.replace(/,/g, ''), 10);
     setResourceAmount(isNaN(parsed) ? 0 : parsed);
@@ -130,31 +133,6 @@ const TuneCoinsCalculatorContent = () => {
       return { toStar: s22resourceResults.star, toFrag: s22resourceResults.frag };
     }
   }, [calcMode, toStar, toFrag, s22resourceResults.star, s22resourceResults.frag]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShardIndex((prev) => (prev + 1) % SHARD_IMAGES.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      const params = new URLSearchParams(window.location.search);
-      const tabParam = params.get('tab');
-
-      if (tabParam === 'max-level') {
-        setCalcMode('BY_RESOURCES');
-      } else {
-        setCalcMode('BY_TARGET');
-      }
-    };
-
-    handlePopState();
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
 
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -252,12 +230,16 @@ const TuneCoinsCalculatorContent = () => {
                   className="w-full bg-black/20 border border-white/10 rounded-lg p-2.5 text-white text-sm focus:outline-none focus:border-purple-400 pr-10 placeholder-sky-200/30 font-medium"
                 />
                 <div className="absolute right-3 flex items-center pointer-events-none">
-                  <Image 
-                    src={resourceType === 'SHARDS' ? SHARD_IMAGES[shardIndex].src : tuneCoins} 
-                    alt="Resource Type" 
-                    width={20}
-                    className="h-auto"
-                  />
+                  
+                  {resourceType === 'SHARDS' ?
+                    <AnimatedShardIcon className="h-auto" /> :
+                    <Image 
+                      src={tuneCoins} 
+                      alt="Tune Coins" 
+                      width={20}
+                      className="h-auto"
+                    />
+                  } 
                 </div>
               </div>
             </Card>
@@ -280,10 +262,21 @@ const TuneCoinsCalculatorContent = () => {
               <div>
                 <p className="text-sky-200/70 text-xs tracking-widest mb-2 uppercase font-bold">Total Shards</p>
                 <div className="flex items-center gap-3 justify-center">
-                  <Image src={SHARD_IMAGES[shardIndex].src} width={36} alt="Racer Shards" className={cn("h-auto", s22targetTotals.shards > 0 ? "animate-pulse" : "")} />
-                  <span className={cn("text-xl", "font-black", "drop-shadow-[0_0_12px_rgba(125,211,252,0.3)]", SHARD_IMAGES[shardIndex].color)}>
-                    {s22targetTotals.shards.toLocaleString()}
-                  </span>
+                  <AnimatedShardIcon>
+                    {(currentShard) => (
+                      <>
+                        <Image 
+                          src={currentShard.src} 
+                          alt={currentShard.alt} 
+                          width={36} 
+                          className={cn("h-auto", s22targetTotals.shards > 0 ? "animate-pulse" : "")}
+                        />
+                        <span className={cn("text-xl", "font-black", "drop-shadow-[0_0_12px_rgba(125,211,252,0.3)]", currentShard.color)}>
+                          {s22targetTotals.shards.toLocaleString()}
+                        </span>
+                      </>
+                    )}
+                  </AnimatedShardIcon>
                 </div>
               </div>
             </div>
@@ -332,13 +325,21 @@ const TuneCoinsCalculatorContent = () => {
               <div>
                 <p className="text-xs tracking-widest mb-2 uppercase font-bold">{resourceType === 'SHARDS' ?  'Tune Coins Cost' : 'Racer Shards Cost'}</p>
                 <div className="text-2xl flex items-center justify-center gap-2">
-                  {resourceType === 'SHARDS' ? s22targetTotals.tuneCoins.toLocaleString() : s22targetTotals.shards.toLocaleString()}
-                  <Image 
-                    src={resourceType === 'SHARDS' ? tuneCoins : SHARD_IMAGES[shardIndex].src} 
-                    alt="Resource Type" 
-                    width={28}
-                    className="h-auto"
-                  />
+                  {resourceType === 'SHARDS' ? 
+                    <>
+                      {s22resourceTotals.tuneCoins.toLocaleString()}
+                      <Image 
+                        src={tuneCoins}
+                        alt="Resource Type" 
+                        width={28}
+                        className="h-auto"
+                      /> 
+                    </> :
+                    <>
+                      {s22resourceTotals.shards.toLocaleString()}
+                      <AnimatedShardIcon width={28} className="h-auto" />
+                    </>
+                  }
                 </div>
               </div>
 
@@ -348,12 +349,15 @@ const TuneCoinsCalculatorContent = () => {
                     <p className="tracking-widest mb-2 font-bold">Next Fragment Progress:</p>
                     <div className="flex items-center justify-center gap-2 w-full">
                       <span className="text-yellow-300 font-bold text-lg">{s22resourceResults.leftover} / {s22resourceResults.nextCost}</span>
-                      <Image 
-                        src={resourceType === 'SHARDS' ? SHARD_IMAGES[shardIndex].src : tuneCoins} 
-                        alt="Resource Type" 
-                        width={28}
-                        className="h-auto"
-                      />
+                      {resourceType === 'SHARDS' ?
+                        <AnimatedShardIcon width={28} className="h-auto" /> :
+                        <Image 
+                          src={tuneCoins}
+                          alt="Resource Type" 
+                          width={28}
+                          className="h-auto"
+                        />
+                      }
                     </div>
                   </div>
                 ) : (
@@ -368,7 +372,7 @@ const TuneCoinsCalculatorContent = () => {
         </div>
 
         {calcMode === 'BY_TARGET' && s22targetTotals.tuneCoins === 0 && (fromStar > toStar || (fromStar === toStar && fromFrag >= toFrag)) && (fromStar !== 0 || fromFrag !== 0 || toStar !== 0 || toFrag !== 0) && (
-          <p className="text-rose-400 text-xs text-center font-semibold tracking-wide bg-rose-500/10 border border-rose-500/20 py-2 rounded-lg max-w-sm mx-auto">
+          <p className="text-rose-400 text-xs text-center font-semibold tracking-wide bg-rose-500/10 border border-rose-500/20 p-2 rounded-lg max-w-sm mx-auto">
             Target level must be higher than current level!
           </p>
         )}
