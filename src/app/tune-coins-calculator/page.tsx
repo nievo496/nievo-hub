@@ -11,36 +11,7 @@ import commonShard from '@/../public/assets/currencies/Common shard.webp';
 import rareShard from '@/../public/assets/currencies/Rare shard.webp';
 import epicShard from '@/../public/assets/currencies/Epic shard.webp';
 import { UpgradeTable } from '@/app/components/UpgradeTable';
-import { UpgradeTableComparision } from '@/app/components/UpgradeTableComparision';
 import { useSearchParams } from 'next/navigation';
-
-
-const S21_SHARDS_MATRIX = [
-  [5, 5, 5, 5, 8, 28],
-  [6, 6, 6, 6, 10, 34],
-  [7, 7, 7, 7, 12, 40],
-  [8, 8, 8, 8, 14, 46],
-  [9, 9, 9, 9, 16, 52],
-  [10, 10, 10, 10, 20, 60]
-];
-
-const S21_TUNE_COINS_COSTS = [
-  500, 500, 500, 500, 800, 
-  600, 600, 600, 600, 1000,
-  700, 700, 700, 700, 1200,
-  800, 800, 800, 800, 1400,
-  900, 900, 900, 900, 1600,
-  1000, 1000, 1000, 1000, 2000,
-];
-
-const S21_RACER_SHARDS_COSTS = [
-  5, 5, 5, 5, 8, 
-  6, 6, 6, 6, 10,
-  7, 7, 7, 7, 12,
-  8, 8, 8, 8, 14,
-  9, 9, 9, 9, 16,
-  10, 10, 10, 10, 20,
-];
 
 const S22_SHARDS_MATRIX = [
   [3, 3, 3, 3, 3, 15],
@@ -76,14 +47,14 @@ const SHARD_IMAGES = [
 ];
 
 type CalcMode = 'BY_TARGET' | 'BY_RESOURCES';
-type ResourceType = 'COINS' | 'SHARDS';
+type ResourceType = 'SHARDS' | 'COINS';
 
 const TuneCoinsCalculatorContent = () => {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get('tab') === 'max-level' ? 'BY_RESOURCES' : 'BY_TARGET';
 
   const [calcMode, setCalcMode] = useState<CalcMode>(initialTab);
-  const [resourceType, setResourceType] = useState<ResourceType>('COINS');
+  const [resourceType, setResourceType] = useState<ResourceType>('SHARDS');
   const [resourceAmount, setResourceAmount] = useState<number>(0);
 
   const [fromStar, setFromStar] = useState(0);
@@ -93,18 +64,6 @@ const TuneCoinsCalculatorContent = () => {
   const [toFrag, setToFrag] = useState(0);
   
   const [shardIndex, setShardIndex] = useState(0);
-
-  const s21targetTotals = useMemo(() => {
-    const startIndex = fromStar * 5 + fromFrag;
-    const endIndex = toStar * 5 + toFrag;
-
-    if (endIndex <= startIndex) return { tuneCoins: 0, shards: 0 };
-
-    const tuneCoinsTotal = S21_TUNE_COINS_COSTS.slice(startIndex, endIndex).reduce((acc, cost) => acc + cost, 0);
-    const shardsTotal = S21_RACER_SHARDS_COSTS.slice(startIndex, endIndex).reduce((acc, cost) => acc + cost, 0);
-
-    return { tuneCoins: tuneCoinsTotal, shards: shardsTotal };
-  }, [fromStar, fromFrag, toStar, toFrag]);
 
   const s22targetTotals = useMemo(() => {
     const startIndex = fromStar * 5 + fromFrag;
@@ -118,31 +77,6 @@ const TuneCoinsCalculatorContent = () => {
     return { tuneCoins: tuneCoinsTotal, shards: shardsTotal };
   }, [fromStar, fromFrag, toStar, toFrag]);
 
-  const s21resourceResults = useMemo(() => {
-    let currentAbsIndex = fromStar * 5 + fromFrag;
-    let budget = resourceAmount;
-    const costArray = resourceType === 'SHARDS' ? S21_RACER_SHARDS_COSTS : S21_TUNE_COINS_COSTS;
-
-    while (currentAbsIndex < costArray.length && budget >= costArray[currentAbsIndex]) {
-      budget -= costArray[currentAbsIndex];
-      currentAbsIndex++;
-    }
-
-    const finalStar = Math.floor(currentAbsIndex / 5);
-    const finalFrag = currentAbsIndex % 5;
-    
-    const hasNextUpgrade = currentAbsIndex < costArray.length;
-    const nextCost = hasNextUpgrade ? costArray[currentAbsIndex] : 0;
-
-    return {
-      star: finalStar,
-      frag: finalFrag,
-      leftover: budget,
-      nextCost,
-      hasNextUpgrade
-    };
-  }, [fromStar, fromFrag, resourceType, resourceAmount]);
-
   const s22resourceResults = useMemo(() => {
     let currentAbsIndex = fromStar * 5 + fromFrag;
     let budget = resourceAmount;
@@ -155,6 +89,9 @@ const TuneCoinsCalculatorContent = () => {
 
     const finalStar = Math.floor(currentAbsIndex / 5);
     const finalFrag = currentAbsIndex % 5;
+
+    setToStar(finalStar);
+    setToFrag(finalFrag);
     
     const hasNextUpgrade = currentAbsIndex < costArray.length;
     const nextCost = hasNextUpgrade ? costArray[currentAbsIndex] : 0;
@@ -190,9 +127,9 @@ const TuneCoinsCalculatorContent = () => {
     if (calcMode === 'BY_TARGET') {
       return { toStar, toFrag };
     } else {
-      return { toStar: s21resourceResults.star, toFrag: s21resourceResults.frag };
+      return { toStar: s22resourceResults.star, toFrag: s22resourceResults.frag };
     }
-  }, [calcMode, toStar, toFrag, s21resourceResults.star, s21resourceResults.frag]);
+  }, [calcMode, toStar, toFrag, s22resourceResults.star, s22resourceResults.frag]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -234,6 +171,9 @@ const TuneCoinsCalculatorContent = () => {
         <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight drop-shadow-sm">
           Disney Speedstorm - Tune Coins Calculator
         </h1>
+        <p className="text-sm md:text-base font-medium">
+          Up to date for Season 22 (Coco)
+        </p>
         <p className="text-sm">Optimize your racer upgrades by calculating star and fragment progression.</p>
       </div>
 
@@ -290,16 +230,16 @@ const TuneCoinsCalculatorContent = () => {
                 <h3 className="text-purple-300 font-bold text-xs uppercase tracking-widest">Your Inventory</h3>
                 <div className="flex rounded-lg bg-black/30 p-0.5 border border-white/10 text-xs">
                   <button 
-                    onClick={() => { setResourceType('COINS'); setResourceAmount(0); }} 
-                    className={cn("px-2.5 py-1 rounded-md transition-all font-semibold", resourceType === 'COINS' ? "bg-blue-400 text-white shadow" : "text-sky-200/60 hover:text-white")}
-                  >
-                    Tune Coins
-                  </button>
-                  <button 
                     onClick={() => { setResourceType('SHARDS'); setResourceAmount(0); }} 
                     className={cn("px-2.5 py-1 rounded-md transition-all font-semibold", resourceType === 'SHARDS' ? "bg-blue-400 text-white shadow" : "text-sky-200/60 hover:text-white")}
                   >
                     Shards
+                  </button>
+                  <button 
+                    onClick={() => { setResourceType('COINS'); setResourceAmount(0); }} 
+                    className={cn("px-2.5 py-1 rounded-md transition-all font-semibold", resourceType === 'COINS' ? "bg-blue-400 text-white shadow" : "text-sky-200/60 hover:text-white")}
+                  >
+                    Tune Coins
                   </button>
                 </div>
               </div>
@@ -329,26 +269,18 @@ const TuneCoinsCalculatorContent = () => {
           {calcMode === 'BY_TARGET' ? (
             <div className="bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 text-center flex flex-col items-center justify-center gap-6 shadow-xl backdrop-blur-md">
               <div>
-                <p className="text-sky-200/70 text-xs tracking-widest mb-2 uppercase font-bold">Total Tune Coins (S21 | S22 )</p>
+                <p className="text-sky-200/70 text-xs tracking-widest mb-2 uppercase font-bold">Total Tune Coins</p>
                 <div className="flex items-center gap-3 justify-center">
-                  <Image src={tuneCoins} width={36} height={36} alt="Tune Coins" className={s21targetTotals.tuneCoins > 0 ? "animate-pulse" : ""} />
-                  <span className="text-4xl font-black text-yellow-300 drop-shadow-[0_0_12px_rgba(253,224,71,0.3)]">
-                    {s21targetTotals.tuneCoins.toLocaleString()}
-                  </span>
-                  |
+                  <Image src={tuneCoins} width={36} height={36} alt="Tune Coins" className={s22targetTotals.tuneCoins > 0 ? "animate-pulse" : ""} />
                   <span className="text-xl font-black text-yellow-300 drop-shadow-[0_0_12px_rgba(253,224,71,0.3)]">
                     {s22targetTotals.tuneCoins.toLocaleString()}
                   </span>
                 </div>
               </div>
               <div>
-                <p className="text-sky-200/70 text-xs tracking-widest mb-2 uppercase font-bold">Total Shards (S21 | S22 )</p>
+                <p className="text-sky-200/70 text-xs tracking-widest mb-2 uppercase font-bold">Total Shards</p>
                 <div className="flex items-center gap-3 justify-center">
-                  <Image src={SHARD_IMAGES[shardIndex].src} width={36} alt="Racer Shards" className={cn("h-auto", s21targetTotals.shards > 0 ? "animate-pulse" : "")} />
-                  <span className={cn("text-4xl", "font-black", "drop-shadow-[0_0_12px_rgba(125,211,252,0.3)]", SHARD_IMAGES[shardIndex].color)}>
-                    {s21targetTotals.shards.toLocaleString()}
-                  </span>
-                  |
+                  <Image src={SHARD_IMAGES[shardIndex].src} width={36} alt="Racer Shards" className={cn("h-auto", s22targetTotals.shards > 0 ? "animate-pulse" : "")} />
                   <span className={cn("text-xl", "font-black", "drop-shadow-[0_0_12px_rgba(125,211,252,0.3)]", SHARD_IMAGES[shardIndex].color)}>
                     {s22targetTotals.shards.toLocaleString()}
                   </span>
@@ -356,132 +288,80 @@ const TuneCoinsCalculatorContent = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
-              <div className="text-sky-200/70 bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 text-center flex flex-col items-center justify-center gap-4 shadow-xl backdrop-blur-md">
-                <div>
-                  <p className="text-xs tracking-widest mb-2 uppercase font-bold">Available Level Season 21</p>
-                  <div className="text-2xl">
-                    {s21resourceResults.star === 0 && s21resourceResults.frag === 0 ? (
-                      <div className="flex items-center justify-center gap-2">
-                        0 stars
-                        <Image
-                          src={`/assets/stars/0 Star Fragments.png`}
-                          alt={`Disney Speedstorm 0 Star Fragments}`}
-                          width={28}
-                          height={28}
-                          className="inline-block"
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        {Array.from({length: s21resourceResults.star}).map((_, i) => (
-                          <Image
-                            key={i}
-                            src={`/assets/stars/5 Star Fragments.png`}
-                            alt={`Disney Speedstorm 5 Star Fragments number ${i + 1}`}
-                            width={28}
-                            height={28}
-                            className="object-contain inline"
-                          />
-                        ))}
-                        {s21resourceResults.frag > 0 && (
-                          <Image
-                            src={`/assets/stars/${s21resourceResults.frag} Star Fragments.png`}
-                            alt={`Disney Speedstorm ${s21resourceResults.frag} Star Fragments`}
-                            width={28}
-                            height={28}
-                            className="object-contain inline"
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                <div className="w-full border-t border-white/10 pt-3 text-sm space-y-1.5 text-sky-200/70">
-                  {s21resourceResults.hasNextUpgrade ? (
-                    <div className="flex flex-col justify-between items-center">
-                      <p className="tracking-widest mb-2 font-bold">Next Fragment Progress:</p>
-                      <div className="flex items-center justify-center gap-2 w-full">
-                        <span className="text-yellow-300 font-bold text-lg">{s21resourceResults.leftover} / {s21resourceResults.nextCost}</span>
-                        <Image 
-                          src={resourceType === 'SHARDS' ? SHARD_IMAGES[shardIndex].src : tuneCoins} 
-                          alt="Resource Type" 
-                          width={28}
-                          className="h-auto"
-                        />
-                      </div>
+            <div className="text-sky-200/70 bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 text-center flex flex-col items-center justify-center gap-4 shadow-xl backdrop-blur-md">
+              <div>
+                <p className="text-xs tracking-widest mb-2 uppercase font-bold">Available Level</p>
+                <div className="text-2xl">
+                  {s22resourceResults.star === 0 && s22resourceResults.frag === 0 ? (
+                    <div className="flex items-center justify-center gap-2">
+                      0 stars
+                      <Image
+                        src={`/assets/stars/0 Star Fragments.png`}
+                        alt={`Disney Speedstorm 0 Star Fragments}`}
+                        width={28}
+                        height={28}
+                        className="inline-block"
+                      />
                     </div>
                   ) : (
-                    <div className="flex justify-between items-center">
-                      <span>Leftover {resourceType === 'SHARDS' ? 'Shards' : 'Tune Coins'}:</span>
-                      <span className="text-yellow-300 text-lg font-bold">{s21resourceResults.leftover.toLocaleString()}</span>
-                    </div>
+                    <>
+                      {Array.from({length: s22resourceResults.star}).map((_, i) => (
+                        <Image
+                          key={i}
+                          src={`/assets/stars/5 Star Fragments.png`}
+                          alt={`Disney Speedstorm 5 Star Fragments number ${i + 1}`}
+                          width={28}
+                          height={28}
+                          className="object-contain inline"
+                        />
+                      ))}
+                      {s22resourceResults.frag > 0 && (
+                        <Image
+                          src={`/assets/stars/${s22resourceResults.frag} Star Fragments.png`}
+                          alt={`Disney Speedstorm ${s22resourceResults.frag} Star Fragments`}
+                          width={28}
+                          height={28}
+                          className="object-contain inline"
+                        />
+                      )}
+                    </>
                   )}
                 </div>
               </div>
-              <div className="text-sky-200/70 bg-white/5 p-6 md:p-8 rounded-3xl border border-white/10 text-center flex flex-col items-center justify-center gap-4 shadow-xl backdrop-blur-md">
-                <div>
-                  <p className="text-xs tracking-widest mb-2 uppercase font-bold">Available Level Season 22 (Sept 24th)</p>
-                  <div className="text-2xl">
-                    {s22resourceResults.star === 0 && s22resourceResults.frag === 0 ? (
-                      <div className="flex items-center justify-center gap-2">
-                        0 stars
-                        <Image
-                          src={`/assets/stars/0 Star Fragments.png`}
-                          alt={`Disney Speedstorm 0 Star Fragments}`}
-                          width={28}
-                          height={28}
-                          className="inline-block"
-                        />
-                      </div>
-                    ) : (
-                      <>
-                        {Array.from({length: s22resourceResults.star}).map((_, i) => (
-                          <Image
-                            key={i}
-                            src={`/assets/stars/5 Star Fragments.png`}
-                            alt={`Disney Speedstorm 5 Star Fragments number ${i + 1}`}
-                            width={28}
-                            height={28}
-                            className="object-contain inline"
-                          />
-                        ))}
-                        {s22resourceResults.frag > 0 && (
-                          <Image
-                            src={`/assets/stars/${s22resourceResults.frag} Star Fragments.png`}
-                            alt={`Disney Speedstorm ${s22resourceResults.frag} Star Fragments`}
-                            width={28}
-                            height={28}
-                            className="object-contain inline"
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
 
-                <div className="w-full border-t border-white/10 pt-3 text-sm space-y-1.5 text-sky-200/70">
-                  {s22resourceResults.hasNextUpgrade ? (
-                    <div className="flex flex-col justify-between items-center">
-                      <p className="tracking-widest mb-2 font-bold">Next Fragment Progress:</p>
-                      <div className="flex items-center justify-center gap-2 w-full">
-                        <span className="text-yellow-300 font-bold text-lg">{s22resourceResults.leftover} / {s22resourceResults.nextCost}</span>
-                        <Image 
-                          src={resourceType === 'SHARDS' ? SHARD_IMAGES[shardIndex].src : tuneCoins} 
-                          alt="Resource Type" 
-                          width={28}
-                          className="h-auto"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex justify-between items-center">
-                      <span>Leftover {resourceType === 'SHARDS' ? 'Shards' : 'Tune Coins'}:</span>
-                      <span className="text-yellow-300 text-lg font-bold">{s22resourceResults.leftover.toLocaleString()}</span>
-                    </div>
-                  )}
+              <div>
+                <p className="text-xs tracking-widest mb-2 uppercase font-bold">{resourceType === 'SHARDS' ?  'Tune Coins Cost' : 'Racer Shards Cost'}</p>
+                <div className="text-2xl flex items-center justify-center gap-2">
+                  {resourceType === 'SHARDS' ? s22targetTotals.tuneCoins.toLocaleString() : s22targetTotals.shards.toLocaleString()}
+                  <Image 
+                    src={resourceType === 'SHARDS' ? tuneCoins : SHARD_IMAGES[shardIndex].src} 
+                    alt="Resource Type" 
+                    width={28}
+                    className="h-auto"
+                  />
                 </div>
+              </div>
+
+              <div className="w-full border-t border-white/10 pt-3 text-sm space-y-1.5 text-sky-200/70">
+                {s22resourceResults.hasNextUpgrade ? (
+                  <div className="flex flex-col justify-between items-center">
+                    <p className="tracking-widest mb-2 font-bold">Next Fragment Progress:</p>
+                    <div className="flex items-center justify-center gap-2 w-full">
+                      <span className="text-yellow-300 font-bold text-lg">{s22resourceResults.leftover} / {s22resourceResults.nextCost}</span>
+                      <Image 
+                        src={resourceType === 'SHARDS' ? SHARD_IMAGES[shardIndex].src : tuneCoins} 
+                        alt="Resource Type" 
+                        width={28}
+                        className="h-auto"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <span>Leftover {resourceType === 'SHARDS' ? 'Shards' : 'Tune Coins'}:</span>
+                    <span className="text-yellow-300 text-lg font-bold">{s22resourceResults.leftover.toLocaleString()}</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -496,84 +376,30 @@ const TuneCoinsCalculatorContent = () => {
 
       {/* Tables Section */}
       <div className="flex justify-between gap-4 md:gap-8 flex-col lg:flex-row w-full max-w-6xl mx-auto">
-        <UpgradeTableComparision
+        <UpgradeTable 
           title="Tune Coins Costs Table"
           currencyIcon={tuneCoins}
           currencyAlt="Tune Coins"
           multiplier={100}
-          baseMatrix1={S21_SHARDS_MATRIX}
-          baseMatrix2={S22_SHARDS_MATRIX}
+          baseMatrix={S22_SHARDS_MATRIX}
           fromStar={fromStar}
           fromFrag={fromFrag}
           toStar={highlightParams.toStar}
           toFrag={highlightParams.toFrag}
         />
         
-        <UpgradeTableComparision
+        <UpgradeTable 
           title="Racer Shards Costs Table"
           currencyIcon={commonShard}
           currencyAlt="Racer Shards"
           multiplier={1}
-          baseMatrix1={S21_SHARDS_MATRIX}
-          baseMatrix2={S22_SHARDS_MATRIX}
-          fromStar={fromStar}
-          fromFrag={fromFrag}
-          toStar={highlightParams.toStar}
-          toFrag={highlightParams.toFrag}
-        />
-      </div>
-
-      {/* <div className="flex justify-between gap-4 md:gap-8 flex-col lg:flex-row w-full max-w-6xl mx-auto">
-        <UpgradeTable 
-          title="Season 21 Tune Coins Costs Table"
-          currencyIcon={tuneCoins}
-          currencyAlt="Tune Coins"
-          multiplier={100}
-          baseMatrix={S21_SHARDS_MATRIX}
-          fromStar={fromStar}
-          fromFrag={fromFrag}
-          toStar={highlightParams.toStar}
-          toFrag={highlightParams.toFrag}
-        />
-        
-        <UpgradeTable 
-          title="Season 21 Racer Shards Costs Table"
-          currencyIcon={commonShard}
-          currencyAlt="Racer Shards"
-          multiplier={1}
-          baseMatrix={S21_SHARDS_MATRIX}
-          fromStar={fromStar}
-          fromFrag={fromFrag}
-          toStar={highlightParams.toStar}
-          toFrag={highlightParams.toFrag}
-        />
-      </div>
-
-      <div className="flex justify-between gap-4 md:gap-8 flex-col lg:flex-row w-full max-w-6xl mx-auto">
-        <UpgradeTable 
-          title="Season 22 Tune Coins Costs Table"
-          currencyIcon={tuneCoins}
-          currencyAlt="Tune Coins"
-          multiplier={100}
           baseMatrix={S22_SHARDS_MATRIX}
           fromStar={fromStar}
           fromFrag={fromFrag}
           toStar={highlightParams.toStar}
           toFrag={highlightParams.toFrag}
         />
-        
-        <UpgradeTable 
-          title="Season 22 Racer Shards Costs Table"
-          currencyIcon={commonShard}
-          currencyAlt="Racer Shards"
-          multiplier={1}
-          baseMatrix={S22_SHARDS_MATRIX}
-          fromStar={fromStar}
-          fromFrag={fromFrag}
-          toStar={highlightParams.toStar}
-          toFrag={highlightParams.toFrag}
-        />
-      </div> */}
+      </div>
 
       {/* Information Disclaimer */}
       <div className="flex items-start gap-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl max-w-4xl mx-auto w-full backdrop-blur-sm">
