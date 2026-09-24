@@ -57,10 +57,9 @@ export const UpgradeTable = ({ title, currencyIcon, currencyAlt, multiplier, bas
                   key={targetStarDisplay} 
                   className="hover:bg-white/10 transition-colors bg-transparent"
                 >
-                  <td className="p-3 font-bold text-yellow-400 text-center bg-white-[0.02]">
-                    {targetStarDisplay - 1} →  {targetStarDisplay} ★
+                  <td className="p-3 text-center text-gray-300 bg-white/[0.1]">
+                    {targetStarDisplay - 1} →  <span className="font-bold text-yellow-400">{targetStarDisplay} ★</span>
                   </td>
-                  {/* ★⭐ */}
 
                   {row.map((baseValue, colIndex) => {
                     const finalValue = baseValue * multiplier;
@@ -84,7 +83,7 @@ export const UpgradeTable = ({ title, currencyIcon, currencyAlt, multiplier, bas
                           isActive 
                             ? 'bg-blue-500/30 text-blue-300 font-semibold border border-blue-400/30 shadow-[inset_0_0_12px_rgba(59,130,246,0.2)]' 
                             : isTotalColumn 
-                              ? 'font-bold text-yellow-400 bg-yellow-500/3' 
+                              ? 'font-bold text-yellow-400 bg-yellow-500/3 border-l border-white/50' 
                               : 'text-slate-200'
                         }`}
                       >
